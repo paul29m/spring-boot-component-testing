@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "9ee4793f-1a8d-4467-adbf-f6053033b50b",
-		"name": "Test Containers Demo",
+		"name": "SpringBoot Component Testing Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "16797469"
 	},
