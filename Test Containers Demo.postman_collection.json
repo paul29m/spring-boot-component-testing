@@ -1,0 +1,468 @@
+{
+	"info": {
+		"_postman_id": "9ee4793f-1a8d-4467-adbf-f6053033b50b",
+		"name": "Test Containers Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16797469"
+	},
+	"item": [
+		{
+			"name": "SoftwareRelease",
+			"item": [
+				{
+					"name": "Add SoftwareRelease",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"releaseDate\": \"2025-09-14\",\n\t\"description\": \"The description\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/softwareRelease",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"softwareRelease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add SoftwareRelease with apps",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"releaseDate\": \"2025-09-14\",\n    \"description\": \"The release of 2\",\n    \"applications\": [\n        {\n            \"name\": \"Accounting Service\",\n            \"description\": \"App added with release\",\n            \"owner\": \"Jane Doe\"\n        },\n        {\n            \"name\": \"User Service\",\n            \"description\": \"Another app added with release\",\n            \"owner\": \"Jane Doe\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/softwareRelease",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"softwareRelease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SoftwareRelease",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/softwareRelease/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"softwareRelease",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Add Comment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"ticketId\": 1,\r\n\t\"commentText\" : \"An application used to track defects and enhancements.\",\r\n\t\"userId\" : 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/comments/add",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"comments",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Comments of a ticket",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/comments?ticketId=1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"comments"
+									],
+									"query": [
+										{
+											"key": "ticketId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add ticket",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Multiple Assignees Needed\",\n\t\"description\" : \"There are cases where we need to assign a ticket to more than one person.\",\n\t\"release\": {\"id\":\"2\"},\n\t\"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/api/ticket",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ticket",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{apiUrl}}/api/ticket/1",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"ticket",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/api/tickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resolve ticket",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/api/ticket/resolve/1",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"ticket",
+								"resolve",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Applications",
+			"item": [
+				{
+					"name": "Add Application",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Demo\",\n\t\"description\" : \"An application used to track defects and enhancements.\",\n\t\"owner\": \"Kesha Williams\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/application",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Application By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/application/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application",
+								"1"
+							]
+						},
+						"description": "A specific application id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all applications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/applications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"applications"
+							]
+						},
+						"description": "list all applications"
+					},
+					"response": []
+				},
+				{
+					"name": "Update App",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 2,\n\t\"name\": \"Demo update\",\n\t\"description\": \"The new description\",\n    \"owner\": \"John Doe\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/application",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete App by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/application/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Link Application to SoftwareRelease",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/softwareRelease/1/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"softwareRelease",
+								"1",
+								"1"
+							]
+						},
+						"description": "First id from the URL is the Application ID and the second is Software Release ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Link Application to SoftwareRelease",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/softwareRelease/3/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"softwareRelease",
+								"3",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "apiUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
