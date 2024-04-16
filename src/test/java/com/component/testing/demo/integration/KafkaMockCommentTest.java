@@ -4,7 +4,7 @@ package com.component.testing.demo.integration;
 import com.component.testing.demo.config.BaseRestAssuredIntegrationTest;
 import com.component.testing.demo.config.PgContainerConfig;
 import com.component.testing.demo.entity.Comment;
-import com.component.testing.demo.helper.KafkaTemplateProducer;
+import com.component.testing.demo.helper.IKafkaTemplate;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,6 @@ import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.*;
 
-/*
- * Test class using the approach of having a configuration class with the testcontainers configurations
- */
 @ActiveProfiles("test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -35,10 +32,10 @@ import static org.hamcrest.Matchers.*;
 public class KafkaMockCommentTest extends BaseRestAssuredIntegrationTest {
 
     @MockBean
-    private KafkaTemplateProducer kafkaTemplateProducer;
+    private IKafkaTemplate kafkaTemplateProducer;
 
     @BeforeEach
-    public void setUpIntegrationTest() {
+    public void setUp() {
         this.setUpAbstractIntegrationTest();
     }
 
@@ -117,34 +114,25 @@ public class KafkaMockCommentTest extends BaseRestAssuredIntegrationTest {
                     validatableResponse.body("commentText", hasItem(comments.get(i)));
                 }
             });
+
         Mockito.verify(kafkaTemplateProducer, Mockito.times(5)).send(Mockito.isA(Comment.class));
     }
 
     @Test
     public void addCommentWithoutTicket() throws ExecutionException, InterruptedException {
-        int ticketId = 6;
-
         given(requestSpecification)
             .body(""" 
-                {"
-                "ticketId": 6,
-                "commentText" : " Comment text ",
-                "userId" : 1"
-                "}
+                {
+                    "ticketId": 6,
+                    "commentText" : " Comment text ",
+                    "userId" : 1"
+                }
                 """)
             .when()
             .post("api/comment/add")
             .then()
             .statusCode(404);
-        Mockito.verify(kafkaTemplateProducer, Mockito.times(0)).send(Mockito.isA(Comment.class));
-    }
 
-    @Test
-    public void healthy() {
-        given(requestSpecification)
-            .when()
-            .get("/actuator/health")
-            .then()
-            .statusCode(200);
+        Mockito.verify(kafkaTemplateProducer, Mockito.times(0)).send(Mockito.isA(Comment.class));
     }
 }

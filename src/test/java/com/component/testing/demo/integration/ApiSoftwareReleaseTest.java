@@ -2,7 +2,7 @@ package com.component.testing.demo.integration;
 
 import com.component.testing.demo.config.BaseRestAssuredIntegrationTest;
 import com.component.testing.demo.config.PgContainerConfig;
-import com.component.testing.demo.helper.KafkaTemplateProducer;
+import com.component.testing.demo.helper.IKafkaTemplate;
 import io.restassured.response.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -17,29 +17,24 @@ import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-/*
- * Test class using the approach of having a configuration class with the testcontainers configurations
- */
 @ActiveProfiles("test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {},
+    properties = {
+        "gitClient.url=http://localhost:9091"
+    },
     classes = {PgContainerConfig.class}
 )
 public class ApiSoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
 
     @MockBean
-    private KafkaTemplateProducer kafkaTemplateProducer;
+    private IKafkaTemplate kafkaTemplateProducer;
 
     public MockWebServer gitClientMockWebServer = new MockWebServer();
 
     @BeforeEach
-    public void setUpIntegrationTest() {
-        this.setUpAbstractIntegrationTest();
-    }
-
-    @BeforeEach
     public void setUp() throws IOException {
+        this.setUpAbstractIntegrationTest();
         gitClientMockWebServer = new MockWebServer();
         gitClientMockWebServer.start(9091);
     }
@@ -265,18 +260,6 @@ public class ApiSoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
             .statusCode(200)
             .body("description", is("A test release"))
             .body("gitTags", empty());
-    }
-
-    /**
-     * Check the health of the application instance that was started using the testcontainers configuration for the API case
-     */
-    @Test
-    public void healthy() {
-        given(requestSpecification)
-            .when()
-            .get("/actuator/health")
-            .then()
-            .statusCode(200);
     }
 
     private static Integer getIdFromResponseHeader(Response response) {

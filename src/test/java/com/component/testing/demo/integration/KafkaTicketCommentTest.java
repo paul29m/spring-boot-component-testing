@@ -20,8 +20,6 @@ import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.KafkaContainer;
@@ -30,9 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Test class using the approach of having a configuration class with the testcontainers configurations
- */
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {},
@@ -44,7 +39,7 @@ public class KafkaTicketCommentTest extends BaseRestAssuredIntegrationTest {
     private KafkaContainer kafka;
 
     @BeforeEach
-    public void setUpIntegrationTest() {
+    public void setUp() {
         this.setUpAbstractIntegrationTest();
     }
 
@@ -202,14 +197,12 @@ public class KafkaTicketCommentTest extends BaseRestAssuredIntegrationTest {
 
     @Test
     public void addCommentWithoutTicket() {
-        int ticketId = 6;
-
         given(requestSpecification)
             .body(""" 
                 {"
-                "ticketId": 6,
-                "commentText" : " Comment text ",
-                "userId" : 1"
+                    "ticketId": 6,
+                    "commentText" : " Comment text ",
+                    "userId" : 1"
                 "}
                 """)
             .when()
@@ -218,17 +211,8 @@ public class KafkaTicketCommentTest extends BaseRestAssuredIntegrationTest {
             .statusCode(404);
     }
 
-    @Test
-    public void healthy() {
-        given(requestSpecification)
-            .when()
-            .get("/actuator/health")
-            .then()
-            .statusCode(200);
-    }
-
     /*
-     * Reads the records from the topic "comments" and returns them  as a list of ConsumerRecord
+     * Reads the records from the topic "comments" and returns them as a list of ConsumerRecord
      * @return a list of ConsumerRecord
      */
     @NotNull

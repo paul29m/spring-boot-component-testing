@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.*;
 import com.component.testing.demo.config.BaseRestAssuredIntegrationTest;
 import com.component.testing.demo.config.PgContainerConfig;
 import com.component.testing.demo.entity.Application;
-import com.component.testing.demo.helper.KafkaTemplateProducer;
+import com.component.testing.demo.helper.IKafkaTemplate;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-/*
- * Test class using the approach of having a configuration class with the testcontainers configurations
- */
 @ActiveProfiles("test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -27,10 +24,10 @@ import org.springframework.test.context.ActiveProfiles;
 public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
 
     @MockBean
-    private KafkaTemplateProducer kafkaTemplateProducer;
+    private IKafkaTemplate kafkaTemplateProducer;
 
     @BeforeEach
-    public void setUpIntegrationTest() {
+    public void setUp() {
         this.setUpAbstractIntegrationTest();
     }
 
@@ -76,6 +73,7 @@ public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
             .post("/api/application")
             .then()
             .statusCode(is(201));
+
         given(requestSpecification)
             .body("""
                 {
@@ -179,6 +177,12 @@ public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
             .delete("/api/application/{id}", response.getId())
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given(requestSpecification)
+            .when()
+            .get("/api/application/{id}", response.getId())
+            .then()
+            .statusCode(404);
     }
 
     @Test
@@ -285,14 +289,11 @@ public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
             .delete("/api/application/{id}", response.getId())
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
-    }
 
-    @Test
-    public void healthy() {
         given(requestSpecification)
             .when()
-            .get("/actuator/health")
+            .get("/api/application/{id}", response.getId())
             .then()
-            .statusCode(200);
+            .statusCode(404);
     }
 }

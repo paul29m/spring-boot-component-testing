@@ -1,4 +1,4 @@
-# Getting started with component testing for Java Applications
+# Getting started with component testing for Spring Boot Applications
 
 ## 1. Setup Environment
 Make sure you have Java 17+ and a [compatible Docker environment](https://www.testcontainers.org/supported_docker_environment/) installed.
