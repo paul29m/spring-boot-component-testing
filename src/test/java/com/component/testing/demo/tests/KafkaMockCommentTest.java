@@ -1,4 +1,4 @@
-package com.component.testing.demo.integration;
+package com.component.testing.demo.tests;
 
 
 import com.component.testing.demo.config.BaseRestAssuredIntegrationTest;

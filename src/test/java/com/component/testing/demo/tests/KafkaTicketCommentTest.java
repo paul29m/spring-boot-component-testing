@@ -1,4 +1,4 @@
-package com.component.testing.demo.integration;
+package com.component.testing.demo.tests;
 
 
 import static com.component.testing.demo.util.KafkaRecordsReader.getOffsets;

@@ -1,4 +1,4 @@
-package com.component.testing.demo.integration;
+package com.component.testing.demo.tests;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
