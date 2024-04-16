@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.*;
     },
     classes = {PgContainerConfig.class}
 )
-public class ApiSoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
+public class SoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
 
     @MockBean
     private IKafkaTemplate kafkaTemplateProducer;

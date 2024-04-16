@@ -33,7 +33,7 @@ import java.util.Map;
     properties = {},
     classes = {KafkaContainerConfig.class, PgContainerConfig.class}
 )
-public class KafkaTicketCommentTest extends BaseRestAssuredIntegrationTest {
+public class TicketAndCommentWithActualKafkaTest extends BaseRestAssuredIntegrationTest {
 
     @Autowired
     private KafkaContainer kafka;

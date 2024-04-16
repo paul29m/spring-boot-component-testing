@@ -21,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
     properties = {},
     classes = {PgContainerConfig.class}
 )
-public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
+public class ApplicationTest extends BaseRestAssuredIntegrationTest {
 
     @MockBean
     private IKafkaTemplate kafkaTemplateProducer;
@@ -164,118 +164,6 @@ public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
             .body("""
                 {
                     "name": "Test Application delete",
-                    "description" : "A test application.",
-                    "owner": "Kate Williams"
-                }
-                """)
-            .when()
-            .post("/api/application");
-        Application response = responseContent.body().as(Application.class);
-
-        given(requestSpecification)
-            .when()
-            .delete("/api/application/{id}", response.getId())
-            .then()
-            .statusCode(HttpStatus.NO_CONTENT.value());
-
-        given(requestSpecification)
-            .when()
-            .get("/api/application/{id}", response.getId())
-            .then()
-            .statusCode(404);
-    }
-
-    @Test
-    public void addApplication2() {
-        given(requestSpecification)
-            .body("""
-                {
-                    "name": "Test Application 2 add",
-                    "description" : "A test application.",
-                    "owner": "Kate Williams"
-                }
-                """)
-            .when()
-            .post("/api/application")
-            .then()
-            .statusCode(is(201))
-            .body("id", notNullValue())
-            .body("name", is("Test Application 2 add"))
-            .body("description", is("A test application."))
-            .body("owner", is("Kate Williams"));
-    }
-
-    @Test
-    public void findApplication2() {
-        Response responseContent = given(requestSpecification)
-            .body("""
-                {
-                    "name": "Test Application find 2",
-                    "description" : "A test application.",
-                    "owner": "Kate Williams"
-                }
-                """)
-            .when()
-            .post("/api/application");
-        Application response = responseContent.body().as(Application.class);
-
-        given(requestSpecification)
-            .when()
-            .get("/api/application/{id}", response.getId())
-            .then()
-            .body("id", is(response.getId()))
-            .body("name", is("Test Application find 2"))
-            .body("description", is("A test application."))
-            .body("owner", is("Kate Williams"));
-    }
-
-    /**
-     * Test case to update an application.
-     * Adds an application and then sends a PUT request with an updated application body.
-     * Expects a status code of 200.
-     */
-    @Test
-    public void updateApplication2() {
-        Response response = given(requestSpecification)
-            .body("""
-                {
-                    "name": "Test Application 2 update",
-                    "description" : "A test application.",
-                    "owner": "Kate Williams"
-                }
-                """)
-            .when()
-            .post("/api/application");
-        Application appResponse = response.body().as(Application.class);
-
-        given(requestSpecification)
-            .body("{" +
-                "\"id\": \" "+ appResponse.getId() + "\"," +
-                "\"name\": \"Updated Application 2\"," +
-                "\"description\" : \"An updated application 2\"," +
-                "\"owner\": \"John Doe\"" +
-                "}")
-            .when()
-            .put("/api/application")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .body("id", is(appResponse.getId()))
-            .body("name", is("Updated Application 2"))
-            .body("owner", is("John Doe"))
-            .body("description", is("An updated application 2"));
-    }
-
-    /**
-     * Test case to verify the deletion of an application.
-     * Adds an application and then sends a DELETE request to remove it.
-     * Expects a status code of 204.
-     */
-    @Test
-    public void deleteApplication2() {
-        Response responseContent = given(requestSpecification)
-            .body("""
-                {
-                    "name": "Test Application 2 delete",
                     "description" : "A test application.",
                     "owner": "Kate Williams"
                 }

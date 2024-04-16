@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.*;
     },
     classes = {PgContainerConfig.class}
 )
-public class KafkaMockCommentTest extends BaseRestAssuredIntegrationTest {
+public class TicketAndCommentWithMockKafkaTest extends BaseRestAssuredIntegrationTest {
 
     @MockBean
     private IKafkaTemplate kafkaTemplateProducer;
