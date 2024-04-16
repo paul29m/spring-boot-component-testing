@@ -6,26 +6,28 @@ import static org.hamcrest.Matchers.*;
 import com.component.testing.demo.config.BaseRestAssuredIntegrationTest;
 import com.component.testing.demo.config.PgContainerConfig;
 import com.component.testing.demo.entity.Application;
+import com.component.testing.demo.helper.KafkaTemplateProducer;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 
 /*
  * Test class using the approach of having a configuration class with the testcontainers configurations
  */
-@Execution(ExecutionMode.SAME_THREAD)
+@ActiveProfiles("test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {
-        "spring.profiles.active=test"
-    },
+    properties = {},
     classes = {PgContainerConfig.class}
 )
 public class DBApplicationTest extends BaseRestAssuredIntegrationTest {
+
+    @MockBean
+    private KafkaTemplateProducer kafkaTemplateProducer;
 
     @BeforeEach
     public void setUpIntegrationTest() {

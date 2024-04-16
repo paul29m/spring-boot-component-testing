@@ -2,14 +2,15 @@ package com.component.testing.demo.integration;
 
 import com.component.testing.demo.config.BaseRestAssuredIntegrationTest;
 import com.component.testing.demo.config.PgContainerConfig;
+import com.component.testing.demo.helper.KafkaTemplateProducer;
 import io.restassured.response.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 
@@ -19,15 +20,16 @@ import static org.hamcrest.Matchers.*;
 /*
  * Test class using the approach of having a configuration class with the testcontainers configurations
  */
-@Execution(ExecutionMode.SAME_THREAD)
+@ActiveProfiles("test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {
-        "spring.profiles.active=test",
-    },
+    properties = {},
     classes = {PgContainerConfig.class}
 )
 public class ApiSoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
+
+    @MockBean
+    private KafkaTemplateProducer kafkaTemplateProducer;
 
     public MockWebServer gitClientMockWebServer = new MockWebServer();
 

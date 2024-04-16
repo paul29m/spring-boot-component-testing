@@ -33,7 +33,6 @@ import java.util.Map;
 /*
  * Test class using the approach of having a configuration class with the testcontainers configurations
  */
-@Execution(ExecutionMode.SAME_THREAD)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {},
@@ -201,24 +200,8 @@ public class KafkaTicketCommentTest extends BaseRestAssuredIntegrationTest {
             });
     }
 
-    /*
-     * Reads the records from the topic "comments" and returns them  as a list of ConsumerRecord
-     * @return a list of ConsumerRecord
-     */
-    @NotNull
-    private List<ConsumerRecord<Comment, Comment>> getLastRecordsFromTopic(int lastNoOfRecords) {
-        KafkaRecordsReader.setBootstrapServers(kafka.getBootstrapServers());
-        final Map<TopicPartition, KafkaRecordsReader.OffsetInfo> partitionOffsetInfos = getOffsets(List.of("comments"));
-        List<ConsumerRecord<Comment, Comment>> records = readRecords(partitionOffsetInfos);
-        int lastIndex = records.size() - lastNoOfRecords;
-        if (lastIndex > -1) {
-            return records.subList(lastIndex, records.size());
-        }
-        return records;
-    }
-
     @Test
-    public void addRatingWithoutTicket() {
+    public void addCommentWithoutTicket() {
         int ticketId = 6;
 
         given(requestSpecification)
@@ -242,5 +225,21 @@ public class KafkaTicketCommentTest extends BaseRestAssuredIntegrationTest {
             .get("/actuator/health")
             .then()
             .statusCode(200);
+    }
+
+    /*
+     * Reads the records from the topic "comments" and returns them  as a list of ConsumerRecord
+     * @return a list of ConsumerRecord
+     */
+    @NotNull
+    private List<ConsumerRecord<Comment, Comment>> getLastRecordsFromTopic(int lastNoOfRecords) {
+        KafkaRecordsReader.setBootstrapServers(kafka.getBootstrapServers());
+        final Map<TopicPartition, KafkaRecordsReader.OffsetInfo> partitionOffsetInfos = getOffsets(List.of("comments"));
+        List<ConsumerRecord<Comment, Comment>> records = readRecords(partitionOffsetInfos);
+        int lastIndex = records.size() - lastNoOfRecords;
+        if (lastIndex > -1) {
+            return records.subList(lastIndex, records.size());
+        }
+        return records;
     }
 }

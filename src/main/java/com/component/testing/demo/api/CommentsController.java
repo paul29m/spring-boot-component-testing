@@ -1,5 +1,6 @@
 package com.component.testing.demo.api;
 
+import com.component.testing.demo.helper.IKafkaTemplate;
 import com.component.testing.demo.service.TicketService;
 import com.component.testing.demo.entity.Comment;
 import com.component.testing.demo.dao.CommentsDAO;
@@ -8,7 +9,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,18 +18,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/comments")
 public class CommentsController {
 
-    private final KafkaTemplate<String, Comment> kafkaTemplate;
+    private final IKafkaTemplate kafkaProducer;
 
     private final CommentsDAO commentsRepository;
 
     private final TicketService ticketService;
 
     public CommentsController(
-        KafkaTemplate<String, Comment> kafkaTemplate,
+        IKafkaTemplate kafkaTemplate,
         CommentsDAO commentsRepository,
         TicketService ticketService
     ) {
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaProducer = kafkaTemplate;
         this.commentsRepository = commentsRepository;
         this.ticketService = ticketService;
     }
@@ -46,9 +46,9 @@ public class CommentsController {
         if (!ticketService.canTicketBeCommented(comment.getTicketId())) {
             return ResponseEntity.notFound().build();
         }
-        //TODO mock kafka template
+
         commentsRepository.add(comment.getTicketId(), comment.getCommentText(), comment.getUserId());
-        kafkaTemplate.send("comments", comment).get();
+        kafkaProducer.send(comment);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
