@@ -123,7 +123,7 @@ public class TicketAndCommentWithActualKafkaTest extends BaseRestAssuredIntegrat
             .when()
             .post("/api/ticket")
             .then().extract().response().getHeader("Location");
-        // http://localhost:8080/ticket/1
+        // location:  http://localhost:8080/ticket/1
         int ticketId = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
 
         //add comment to ticket
@@ -138,6 +138,7 @@ public class TicketAndCommentWithActualKafkaTest extends BaseRestAssuredIntegrat
             .then()
             .statusCode(201);
 
+        // verify if the comment is in the kafka broker
         await()
             .untilAsserted(() -> {
                 List<ConsumerRecord<Comment, Comment>> records = getLastRecordsFromTopic(1);
@@ -162,7 +163,7 @@ public class TicketAndCommentWithActualKafkaTest extends BaseRestAssuredIntegrat
             .when()
             .post("/api/ticket")
             .then().extract().response().getHeader("Location");
-        // http://localhost:8080/ticket/1
+        // location: http://localhost:8080/ticket/1
         int ticketId = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
 
         // add multiple comments to same ticket

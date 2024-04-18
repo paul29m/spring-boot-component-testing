@@ -52,7 +52,7 @@ public class TicketAndCommentWithMockKafkaTest extends BaseRestAssuredIntegratio
             .when()
             .post("/api/ticket")
             .then().extract().response().getHeader("Location");
-        // http://localhost:8080/ticket/1
+        // location: http://localhost:8080/ticket/1
         int ticketId = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
 
         //add comment to ticket
@@ -67,7 +67,7 @@ public class TicketAndCommentWithMockKafkaTest extends BaseRestAssuredIntegratio
             .then()
             .statusCode(201);
 
-        await().untilAsserted( () -> {Mockito.verify(kafkaTemplateProducer, Mockito.times(1)).send(Mockito.isA(Comment.class));} );
+        Mockito.verify(kafkaTemplateProducer, Mockito.times(1)).send(Mockito.isA(Comment.class));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class TicketAndCommentWithMockKafkaTest extends BaseRestAssuredIntegratio
             .when()
             .post("/api/ticket")
             .then().extract().response().getHeader("Location");
-        // http://localhost:8080/ticket/1
+        //location: http://localhost:8080/ticket/1
         int ticketId = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
 
         // add multiple comments to same ticket

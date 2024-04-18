@@ -140,7 +140,7 @@ public class SoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
             .when()
             .post("/api/application");
         Integer appId = getIdFromResponseHeader(appResponse);
-        ;
+
         // create a release
         Response releaseResponse = given(requestSpecification)
             .body("""
@@ -196,7 +196,7 @@ public class SoftwareReleaseTest extends BaseRestAssuredIntegrationTest {
             .when()
             .post("/api/application");
         Integer appId = getIdFromResponseHeader(appResponse);
-        ;
+
         // create a release
         Response releaseResponse = given(requestSpecification)
             .body("""
